@@ -1,0 +1,2 @@
+pacckages: -./@app/*
+  -./packages/*
