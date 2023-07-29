@@ -25,11 +25,11 @@ export default {
         const { email, password } = req.body
         console.log(email, password, 'from user controller');
 
-        // const user = await User.create({
-        //     email,
-        //     password
-        // })
-        res.status(201).json('user');
+        const user = await User.create({
+            email,
+            password
+        })
+        res.status(201).json(user);
     },
     async update(req: Request, res: Response) {
         const { id, data } = req.body
