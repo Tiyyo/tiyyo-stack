@@ -23,7 +23,6 @@ export default {
     },
     async create(req: Request, res: Response) {
         const { email, password } = req.body
-        console.log(email, password, 'from user controller');
 
         const user = await User.create({
             email,

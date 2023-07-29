@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import logger from '../app/helpers/logger.ts'
 
 const prisma = new PrismaClient()
 
@@ -69,14 +70,14 @@ const userData: Prisma.UserCreateInput[] = [
 ]
 
 async function main() {
-    console.log(`Start seeding ...`)
+    logger.info(`Start seeding ...`)
     for (const u of userData) {
         const user = await prisma.user.create({
             data: u,
         })
-        console.log(`Created user with id: ${user.id}`)
+        logger.info(`Created user with id: ${user.id}`)
     }
-    console.log(`Seeding finished.`)
+    logger.info(`Seeding finished.`)
 }
 
 main()
@@ -84,7 +85,7 @@ main()
         await prisma.$disconnect()
     })
     .catch(async (e) => {
-        console.error(e)
+        logger.error(e)
         await prisma.$disconnect()
         process.exit(1)
     })
