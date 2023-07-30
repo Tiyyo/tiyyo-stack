@@ -7,11 +7,12 @@ const router: Router = express.Router();
 
 router.use('/api/user', userRouter);
 
+router.use((_req, _res, next) => {
+    next(new NotFoundError("Request couldn't match any routes"));
+})
+
 router.use(errorHandler)
 
-router.use(() => {
-    throw new NotFoundError('Not Found');
-})
 
 
 export default router;

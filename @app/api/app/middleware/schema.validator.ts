@@ -11,10 +11,11 @@ export default (schema?: AnyZodObject) => async (request: Request, _res: Respons
     if (!schema) return next(new ServerError('No schema provided'));
     try {
         await schema.parseAsync(request);
-        next();
+        // next();
     } catch (error) {
         if (error instanceof ZodError) {
             const fieldErros: Record<string, string> = {}
+            // We don't use ZodError formErrors accessor because we can't associate the error with the field
             error.issues.map((e) => {
                 return fieldErros[e.path[1]] = e.message
             })

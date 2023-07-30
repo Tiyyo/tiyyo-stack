@@ -13,7 +13,7 @@ The "tiyyo-stack" project is a monorepo project template designed to quickly sta
 Clone the repository:
 
 ```
-git clone https://github.com/Tiyyo/tiyyo-stack.git`
+git clone https://github.com/Tiyyo/tiyyo-stack.git
 ```
 
 Install all project dependencies at the root directory:

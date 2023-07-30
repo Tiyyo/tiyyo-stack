@@ -4,6 +4,7 @@ import ServerError from "../helpers/errors/server.error.ts";
 import AuthorizationError from "../helpers/errors/unauthorized.error.ts";
 import ValidationError from "../helpers/errors/validation.error.ts";
 import logger from "../helpers/logger.ts";
+import NotFoundError from "../helpers/errors/not.found.error.ts";
 
 export const errorHandler = (error: any, _req: Request, res: Response, next: NextFunction) => {
     if (error instanceof ValidationError) {
@@ -13,7 +14,7 @@ export const errorHandler = (error: any, _req: Request, res: Response, next: Nex
         });
     }
 
-    if (error instanceof AuthorizationError || error instanceof ServerError || error instanceof DatabaseError) {
+    if (error instanceof AuthorizationError || error instanceof ServerError || error instanceof DatabaseError || error instanceof NotFoundError) {
         logger.error(error.name + " " + error.message);
         return res.status(error.status).send(error.userMessage);
     }
