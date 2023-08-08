@@ -24,13 +24,14 @@ export default {
         const users = await cacheOrGetCacheData('users', async () => {
             try {
                 const data = await User.findMany();
+                return data
 
             } catch (error) {
                 throw new Error('Could not fetch users from cache')
             }
 
         })
-
+        // const data = await User.findMany();
         res.status(200).json(users);
     },
     async create(req: Request, res: Response) {
