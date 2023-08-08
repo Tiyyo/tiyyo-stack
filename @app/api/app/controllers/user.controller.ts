@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import User from '../models/user.ts'
 import ServerError from '../helpers/errors/server.error.ts';
 import { Prisma } from '@prisma/client';
+import { cacheOrGetCacheData } from '../helpers/cache.data.ts';
+import DatabaseError from '../helpers/errors/database.error.ts';
+
 
 export default {
     // Controller should only perfom database operations and return a response
@@ -17,7 +20,16 @@ export default {
         res.status(200).json(user);
     },
     async getAll(_req: Request, res: Response) {
-        const users = await User.findMany();
+
+        const users = await cacheOrGetCacheData('users', async () => {
+            try {
+                const data = await User.findMany();
+
+            } catch (error) {
+                throw new Error('Could not fetch users from cache')
+            }
+
+        })
 
         res.status(200).json(users);
     },
