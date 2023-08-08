@@ -11,7 +11,7 @@ export default (schema?: AnyZodObject) => async (request: Request, _res: Respons
     if (!schema) return next(new ServerError('No schema provided'));
     try {
         await schema.parseAsync(request);
-        // next();
+        next();
     } catch (error) {
         if (error instanceof ZodError) {
             const fieldErros: Record<string, string> = {}
