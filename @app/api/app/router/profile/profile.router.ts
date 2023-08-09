@@ -1,20 +1,20 @@
 import express, { Router } from 'express';
-import userController from '../../controllers/user.controller.ts'
+import profileController from '../../controllers/profile.controller.ts'
 import factory from '../../middleware/factory.controller.ts'
 import schemas from '@tiyyo-stack/schema'
 import validate from '../../middleware/schema.validator.ts'
 import upload from '../../service/upload/upload.ts';
-const { userSchema } = schemas
+const { profileSchema } = schemas
 
 
 const router: Router = express.Router();
 
-const { getOne, getAll, create, update, destroy } = userController
+const { getOne, getAll, create, update, destroy } = profileController
 
 
 router.route('/')
     .get(factory(getAll))
-    .post(validate(userSchema), upload.single('image'), factory(create))
+    .post(validate(profileSchema), upload.single('image'), factory(create))
 
 router.route('/:id')
     .get(factory(getOne))

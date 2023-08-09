@@ -17,6 +17,8 @@ model User {
 model Profile {
     id            Int       @id @default(autoincrement())
     name          String?
+    avatar_id     Int?
+    avatar        Image?    @relation(fields: [avatar_id], references: [id])
     bio           String?
     date_of_birth DateTime?
     user          User      @relation(fields: [user_id], references: [id])
@@ -34,4 +36,13 @@ model Post {
     viewCount Int      @default(0)
     author    Profile? @relation(fields: [author_id], references: [id])
     author_id Int?
+}
+
+model Image {
+    id      Int       @id @default(autoincrement())
+    link    String    @unique
+    key     String    @unique
+    width   Int?
+    height  Int?
+    Profile Profile[]
 }

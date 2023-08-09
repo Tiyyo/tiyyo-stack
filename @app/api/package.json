@@ -16,12 +16,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.387.0",
+    "@aws-sdk/s3-request-presigner": "^3.387.0",
     "@prisma/client": "^5.0.0",
     "@tiyyo-stack/schema": "workspace:^",
     "@tiyyo-stack/types": "workspace:^",
     "@types/ioredis": "5.0.0",
     "@types/morgan": "^1.9.4",
     "api": "^6.1.0",
+    "aws-sdk": "^2.1432.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -29,7 +32,10 @@
     "ioredis": "5.3.2",
     "jsonwebtoken": "^9.0.1",
     "morgan": "^1.10.0",
+    "multer": "1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
     "nodemon": "^3.0.1",
+    "sharp": "^0.32.4",
     "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
@@ -37,6 +43,7 @@
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
+    "@types/multer-s3": "^3.0.0",
     "prisma": "^5.0.0"
   },
   "prisma": {
