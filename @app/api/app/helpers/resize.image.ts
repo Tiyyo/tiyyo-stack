@@ -6,7 +6,7 @@ function resizeImage(buffer: Buffer, height: number, width: number) {
             height,
             width
         }
-    )
+    ).toBuffer()
     return resizedBuffer
 }
 

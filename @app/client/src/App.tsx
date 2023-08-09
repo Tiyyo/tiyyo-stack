@@ -1,9 +1,9 @@
 import useFetch from "./hooks/useFetch";
+import { io } from "socket.io"
 
 function App() {
-  const { data, isError, loading, error } = useFetch(
-    "http://localhost:8080/api/us"
-  );
+
+  
 
   return (
     <>

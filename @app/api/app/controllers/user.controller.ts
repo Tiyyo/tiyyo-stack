@@ -70,10 +70,11 @@ export default {
 
         const userId: any = id
 
-        const user = await User.delete(userId);
+        // console.log(user, 'USER')
+        const user = await User.delete({ id: userId });
         // delete cache when a mutation occurs
         await redis.del('users')
 
-        res.status(200).json(user);
+        res.status(200).json(!!user);
     },
 }

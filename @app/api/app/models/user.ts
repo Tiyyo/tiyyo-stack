@@ -44,6 +44,7 @@ export default {
         }
     },
     async delete(id: Prisma.UserWhereUniqueInput) {
+
         try {
             return await prisma.user.delete({
                 where: id,

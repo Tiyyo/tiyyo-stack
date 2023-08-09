@@ -29,11 +29,12 @@ const s3 = new S3Client({
 
 export async function uploadImageToBucket(file: any, { height, width }: { height: number, width: number }) {
 
-    const resizeFileBuffer = resizeImage(file.buffer, height, width)
+    const resizeFileBuffer = await resizeImage(file.buffer, height, width)
+    const imageKey = `${randomImageName()}_${file.originalName}_w${width}`
 
     const params = {
         Bucket: bucketName,
-        Key: `${randomImageName}_file.originalName_w${width}`,
+        Key: imageKey,
         Body: resizeFileBuffer,
         ContentType: file.mimetype
     }
@@ -41,13 +42,13 @@ export async function uploadImageToBucket(file: any, { height, width }: { height
     const command = new PutObjectCommand(params)
 
     await s3.send(command).catch((err) => {
-        throw new ServerError('Upload to bucked has failed : ' + err.message)
+        throw new ServerError('Upload to bucket has failed : ' + err.message)
     })
 
     const link = await getSignedUrl(s3, command)
 
     return {
-        key: `${randomImageName}_file.originalName_w${width}`,
+        key: imageKey,
         link: link
     }
 }
@@ -65,6 +66,7 @@ export async function deleteImageFromBucket(imageKey: string) {
     try {
         await s3.send(new DeleteObjectCommand(params))
     } catch (error) {
-        logger.error('Object have been delete from bucket')
+
+        logger.error('Object have not been delete from bucket')
     }
 }
