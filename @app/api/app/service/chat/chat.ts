@@ -1,13 +1,18 @@
-import { io } from "../../../index.ts"
+
+import { Server } from 'socket.io'
 import logger from "../../helpers/logger.ts"
 
-const init = () => {
-    io.on('connexion', (socket) => {
-        logger.info("A new user has connect")
+const init = (server, options) => {
+    const io = new Server(server, options)
+
+    io.on('connection', (socket) => {
+        logger.info("A new user has logged in")
+        console.log(socket.id)
 
         // socket.emit('history', history);
 
         socket.on('username', (username: string, userId: string) => {
+            console.log(username, userId)
             socket.data.username = username
             socket.data.userId = userId
         })
@@ -16,10 +21,12 @@ const init = () => {
             const infos = {
                 username: socket.data.username,
                 userId: socket.data.userId,
+                socketId: socket.id,
                 message: message,
                 date: new Date(),
                 avatar: avatar
             }
+            console.log(infos)
             io.emit('message_to_users', infos)
 
             // push infos to history with redis
