@@ -4,6 +4,7 @@ import ServerError from '../helpers/errors/server.error.ts';
 import { Prisma } from '@prisma/client';
 import { cacheOrGetCacheData } from '../helpers/cache.data.ts';
 import { Redis } from "ioredis"
+import logger from '../helpers/logger.ts';
 
 const redis = new Redis()
 
@@ -28,6 +29,12 @@ export default {
     },
     async getAll(_req: Request, res: Response) {
 
+        //tempory solution to invalidate cache every getAll request
+        // await redis.del('users', (err, reply) => {
+        //     if (err) throw new ServerError('Could not delete cache')
+        //     logger.info('Cache deleted', reply)
+        // })
+
         const users = await cacheOrGetCacheData('users', async () => {
             try {
                 const data = await User.findMany();
@@ -44,36 +51,46 @@ export default {
     async create(req: Request, res: Response) {
         const { email, password } = req.body
 
+        // Invalidaiton cache : delete cache when a mutation occurs
+        await redis.del('users', (err, reply) => {
+            if (err) throw new ServerError('Could not delete cache')
+            logger.info('Cache deleted', reply)
+        })
+
         const user = await User.create({
             email,
             password
         })
-        // delete cache when a mutation occurs
-        await redis.del('users')
         res.status(201).json(user);
     },
     async update(req: Request, res: Response) {
         const { id, data } = req.body
         if (!id) throw new ServerError('Invalid user id');
 
+        // Invalidation cache : delete cache when a mutation occurs
+        await redis.del('users', (err, reply) => {
+            if (err) throw new ServerError('Could not delete cache')
+            logger.info('Cache deleted', reply)
+        })
+
         const userId: Prisma.UserWhereUniqueInput = id
 
         const user = await User.update(userId, data);
-
-        // delete cache when a mutation occurs
-        await redis.del('users')
         res.status(200).json(user);
     },
     async destroy(req: Request, res: Response) {
         const { id } = req.params
         if (!id) throw new ServerError('Invalid user id');
 
+        // Invalidation cache : delete cache when a mutation occurs
+        await redis.del('users', (err, reply) => {
+            if (err) throw new ServerError('Could not delete cache')
+            logger.info('Cache deleted', reply)
+        })
+
         const userId: any = id
 
-        // console.log(user, 'USER')
         const user = await User.delete({ id: userId });
-        // delete cache when a mutation occurs
-        await redis.del('users')
 
         res.status(200).json(!!user);
     },

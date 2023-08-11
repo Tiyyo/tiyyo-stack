@@ -21,7 +21,6 @@ export default {
     },
     async destroy(req: Request, res: Response) {
         const { imagekey } = req.params
-        console.log(imagekey)
 
         await deleteImageFromBucket(imagekey)
 

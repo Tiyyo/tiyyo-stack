@@ -4,11 +4,21 @@ import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Chat from "./features/chat/index.tsx";
+import Login from "./features/auth/login.tsx";
+import Register from "./features/auth/Register.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />
+  },
+  {
+    path: "/signup",
+    element: <Register />
+  },
+  {
+    path: "/login",
+    element: <Login />
   },
   { path: "/chat", element: <Chat /> }
 ]);

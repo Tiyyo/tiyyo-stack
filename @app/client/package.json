@@ -10,14 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.2.0",
     "@tiyyo-stack/schema": "workspace:^",
     "@tiyyo-stack/tailwind-config": "workspace:^",
     "@tiyyo-stack/types": "workspace:^",
     "@tiyyo-stack/ui-components": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.4",
     "react-router-dom": "^6.15.0",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

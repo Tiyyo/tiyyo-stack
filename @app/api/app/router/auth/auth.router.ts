@@ -4,6 +4,7 @@ import validate from '../../middleware/schema.validator.ts'
 import factory from '../../middleware/factory.controller.ts'
 import schemas from '@tiyyo-stack/schema'
 import { validateToken } from '../../middleware/validate.token.ts';
+import { canals } from '../../config/types.ts';
 
 
 const router: Router = express.Router();
@@ -16,7 +17,7 @@ router.route('/login')
     .post(factory(signin))
 
 router.route('/register')
-    .post(validate(userSchema), factory(register))
+    .post(validate(userSchema, canals.body), factory(register))
 
 router.route('/current')
     .get(validateToken, current)

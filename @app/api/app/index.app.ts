@@ -22,7 +22,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }))
-app.use(cors(corsOptions))
+
+// Cors should not be used that way in production
+// the corsOptions should be set to the origin of the client    
+// app.use(cors(corsOptions))
+app.use(cors("*" as CorsOptions))
+
 app.use(router)
+
 
 export default app

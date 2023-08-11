@@ -6,10 +6,9 @@ const DEFAULT_EXPIRATION = 3600
 
 // utility function to cache data
 
-export const cacheOrGetCacheData = async (key: string, cb: any) => {
+export const cacheOrGetCacheData = async (key: string, callback: any) => {
     return new Promise(async (resolve, reject) => {
         let cacheValue;
-
 
 
         logger.info('cacheOrGetCacheData is called', cacheValue)
@@ -21,7 +20,9 @@ export const cacheOrGetCacheData = async (key: string, cb: any) => {
 
         if (cacheValue) return resolve(JSON.parse(cacheValue))
 
-        const data = await cb()
+        logger.info('cache value is empty')
+
+        const data = await callback()
 
         redis.set(key, JSON.stringify(data), 'EX', DEFAULT_EXPIRATION)
 
