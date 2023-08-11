@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
 import { createUser, login } from "../service/auth/auth.ts";
+import ServerError from "../helpers/errors/server.error.ts";
+import logger from "../helpers/logger.ts";
+import { Redis } from "ioredis"
+
+
+const redis = new Redis()
 
 
 export default {
@@ -10,6 +16,12 @@ export default {
         }
 
         const isUserCreated = await createUser(data)
+
+        // Invalidaiton cache : delete cache when a mutation occurs
+        await redis.del('users', (err, reply) => {
+            if (err) throw new ServerError('Could not delete cache')
+            logger.info('Cache deleted', reply)
+        })
 
         if (isUserCreated) res.status(201).json(isUserCreated)
 

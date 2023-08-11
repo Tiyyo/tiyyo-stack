@@ -18,7 +18,7 @@ const { getOne, getAll, create, update, destroy } = userController
 
 router.route('/')
     .get(factory(getAll))
-    .post(validate(userSchema, canals.body), upload.single('image'), factory(create))
+    .post(validate(userSchema, canals.body), factory(create))
 
 router.route('/:id')
     .get(factory(getOne))

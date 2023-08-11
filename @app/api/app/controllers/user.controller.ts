@@ -51,6 +51,7 @@ export default {
     async create(req: Request, res: Response) {
         const { email, password } = req.body
 
+        console.log('is this working');
         // Invalidaiton cache : delete cache when a mutation occurs
         await redis.del('users', (err, reply) => {
             if (err) throw new ServerError('Could not delete cache')

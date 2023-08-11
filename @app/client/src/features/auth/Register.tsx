@@ -45,7 +45,7 @@ function Register() {
           <SocialBtn value="Sign Up with Google">
             <Google />
           </SocialBtn>
-          <SocialBtn value="Sign In with Github">
+          <SocialBtn value="Sign Up with Github">
             <Github />
           </SocialBtn>
           <SeparatorLine />
