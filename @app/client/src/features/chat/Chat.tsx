@@ -8,53 +8,108 @@ import Page from "../../layout/Page";
 import { useQuery } from "react-query";
 import "./message.css";
 import Message from "./Message";
+import isDatesAreEquals from "../../utils/dates.are.equals";
+import { ChatMessage } from "../../@types";
+import Return from "../../assets/Return";
+import { useNavigate } from "react-router-dom";
 
 function Chat({ user, username = "Username" }) {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const navigate = useNavigate();
 
   // currently useless but setup for later
   // const { data } = useQuery("user", {
   //   enabled: true
   // });
 
-  const [messages, setMessages] = useState<any>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: 1,
+      username: "David",
+      socketId: "123456789",
+      userId: "123456789",
       message: "Hello",
       date: new Date("08-08-2021-12:00"),
       avatar: "https://picsum.photos/200/300"
     },
     {
-      id: 2,
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
       message: "Hi",
-      date: new Date("08-09-2021-17:00")
+      date: new Date("08-09-2021-17:00"),
+      avatar: "https://picsum.photos/200/300"
     },
     {
-      id: 3,
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
       message: "How are you?",
-      date: new Date("08-09-2021-19:00")
+      date: new Date("08-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
     },
     {
-      id: 4,
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
       message: "I'm fine",
-      date: new Date("09-09-2021-19:00  ")
+      date: new Date("09-09-2021-19:00  "),
+      avatar: "https://picsum.photos/200/300"
     },
     {
-      id: 5,
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
       message: "Thank you",
-      date: new Date("10-09-2021-19:00")
+      date: new Date("10-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
+    },
+    {
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
+      message: "Thank you",
+      date: new Date("10-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
+    },
+    {
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
+      message: "Thank you",
+      date: new Date("10-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
+    },
+    {
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
+      message: "Thank you",
+      date: new Date("10-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
+    },
+    {
+      username: "Julien",
+      socketId: "123456789",
+      userId: "123456789",
+      message: "Thank you",
+      date: new Date("10-09-2021-19:00"),
+      avatar: "https://picsum.photos/200/300"
     }
   ]);
 
-  console.log(messages);
   function connect() {
     socket.connect();
     socket.emit("username", username, user?.userId);
   }
 
-  async function getHistory(history) {
+  function getHistory(history: ChatMessage[]) {
+    // typescript doesn't know about toReversed() method yet
     const reversedHistory = history.toReversed();
-    setMessages((previous: any) => [...previous, ...reversedHistory]);
+    setMessages((previous: ChatMessage[]) => [...previous, ...reversedHistory]);
+  }
+
+  function handleClickReturn() {
+    navigate(-1);
   }
 
   useEffect(() => {
@@ -68,9 +123,8 @@ function Chat({ user, username = "Username" }) {
       setIsConnected(false);
     }
 
-    function displayNewMessage(value: any) {
-      console.log(value);
-      setMessages((previous: any) => [...previous, value]);
+    function displayNewMessage(value: ChatMessage) {
+      setMessages((previous: ChatMessage[]) => [...previous, value]);
     }
     if (user?.userId) {
       socket.emit("username", username, user.userId);
@@ -89,29 +143,20 @@ function Chat({ user, username = "Username" }) {
 
   return (
     <>
-      {/* <ConnectionState isConnected={isConnected} /> */}
-      {/* <Events events={messages} /> */}
-      {/* <ConnectionManager user={user} /> */}
-      <div className="h-screen w-full overflow-hidden">
-        <img src="/chat_bg.svg" className="re absolute top-0 object-cover" />
-        <div className=" mx-auto mt-6 flex h-96 w-80 flex-col gap-y-1.5 rounded-xl border  px-3 py-3 shadow-sm">
-          {messages.map((message: any, index: number) => {
+      <header className="bg-primary-400 text-accent-200 flex h-14 items-center border-b border-opacity-30 px-4">
+        <button type="button" onClick={handleClickReturn}>
+          <Return />
+        </button>
+      </header>
+      <main className="flex h-[80%] flex-grow flex-col justify-end overflow-hidden bg-[url('/chat_bg_2.svg')] py-2">
+        <div className="flex flex-col gap-y-8 overflow-y-scroll py-3 pl-8 pr-3">
+          {messages.map((message: ChatMessage, index: number) => {
             let sameDate = false;
             if (index >= 1) {
-              const date1 = [
-                new Date(message.date).getDate(),
-                new Date(message.date).getMonth(),
-                new Date(message.date).getFullYear()
-              ].toString();
-
-              const date2 = [
-                new Date(messages[index - 1].date).getDate(),
-                new Date(messages[index - 1].date).getMonth(),
-                new Date(messages[index - 1].date).getFullYear()
-              ].toString();
-              if (date1 === date2) {
-                sameDate = true;
-              }
+              sameDate = isDatesAreEquals(
+                message.date,
+                messages[index - 1].date
+              );
             }
             return (
               <Message
@@ -122,8 +167,14 @@ function Chat({ user, username = "Username" }) {
             );
           })}
         </div>
-      </div>
-      <MyForm />
+      </main>
+
+      <footer className="border-secondary-400 bg-primary-400 h-20 border-t border-opacity-30">
+        <MyForm />
+      </footer>
+      {/* <ConnectionState isConnected={isConnected} /> */}
+      {/* <Events events={messages} /> */}
+      {/* <ConnectionManager user={user} /> */}
     </>
   );
 }

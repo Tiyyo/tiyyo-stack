@@ -27,6 +27,9 @@ module.exports = {
           400: "#EE7744",
           500: "#EC6A32"
         }
+      },
+      backgroundImage: {
+        chat: "url(/chat_bg.svg"
       }
     }
   },

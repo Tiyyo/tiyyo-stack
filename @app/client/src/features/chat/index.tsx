@@ -6,10 +6,9 @@ import Chat from "./Chat";
 function ChatContainer() {
   const { user } = useContext(AppContext);
   return (
-    <Page>
-      <h1>Here goes chat</h1>
+    <div className="bg-primary-200 border-red flex h-screen min-h-screen flex-col justify-between border">
       <Chat user={user} />
-    </Page>
+    </div>
   );
 }
 

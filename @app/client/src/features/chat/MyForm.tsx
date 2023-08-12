@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { socket } from "../../socket";
+import Send from "../../assets/Send";
 
 export function MyForm() {
   const [value, setValue] = useState<string>("");
@@ -18,11 +19,23 @@ export function MyForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} ref={formRef}>
-      <input onChange={(e) => setValue(e.target.value)} />
-      <button type="submit" disabled={isLoading}>
-        {" "}
-        Submit{" "}
+    <form
+      onSubmit={onSubmit}
+      ref={formRef}
+      className="flex h-full w-full items-center gap-x-2"
+    >
+      <input
+        onChange={(e) => setValue(e.target.value)}
+        className="bg-primary-100 ml-6 h-8 w-[70%] rounded-lg pl-1 placeholder:pl-2"
+        placeholder="Message"
+      />
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="text-secondary-100 bg-primary-500 flex
+        h-9 w-9 items-center justify-center rounded-full text-opacity-80 shadow"
+      >
+        <Send />
       </button>
     </form>
   );
