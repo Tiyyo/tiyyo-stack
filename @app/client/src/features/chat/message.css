@@ -1,0 +1,46 @@
+.message {
+  border-radius: 1.15rem;
+  line-height: 1.25;
+  max-width: 75%;
+  padding: 0.5rem 0.875rem;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.message::before,
+.message::after {
+  bottom: -0.2rem;
+  content: "";
+  height: 1.2rem;
+  position: absolute;
+}
+
+.owned.message::before {
+  border-bottom-left-radius: 0.8rem 0.3rem;
+  border-right: 1rem solid rgb(243 160 124);
+  right: -0rem;
+  transform: translate(0, -0.1rem);
+}
+
+.owned.message::after {
+  background-color: transparent;
+  border-bottom-left-radius: 0.8rem;
+  right: 15px;
+  transform: translate(-30px, -2px);
+  width: 10px;
+}
+
+.received.message::before {
+  border-bottom-right-radius: 0.8rem 0.3rem;
+  border-left: 1rem solid rgb(224 224 224);
+  left: -0rem;
+  transform: translate(0, -0.1rem);
+}
+
+.received.message::after {
+  background-color: transparent;
+  border-bottom-right-radius: 0.8rem;
+  left: 15px;
+  transform: translate(-30px, -2px);
+  width: 10px;
+}

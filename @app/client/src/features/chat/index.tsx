@@ -1,46 +1,16 @@
-import { socket } from "../../socket";
-import { useState, useEffect } from "react";
-import { MyForm } from "./MyForm";
-import { ConnectionManager } from "./ConnectionManager";
-import { Events } from "./MyEvents";
-import { ConnectionState } from "./ConnectionState";
+import Page from "../../layout/Page";
+import AppContext from "../../context/AppContext";
+import { useContext } from "react";
+import Chat from "./Chat";
 
-function Chat() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [fooEvents, setFooEvents] = useState<any>([]);
-
-  useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    function onFooEvent(value: any) {
-      setFooEvents((previous: any) => [...previous, value]);
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    socket.on("foo", onFooEvent);
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off("foo", onFooEvent);
-    };
-  }, []);
-
+function ChatContainer() {
+  const { user } = useContext(AppContext);
   return (
-    <>
-      <ConnectionState isConnected={isConnected} />
-      <Events events={fooEvents} />
-      <ConnectionManager />
-      <MyForm />
-    </>
+    <Page>
+      <h1>Here goes chat</h1>
+      <Chat user={user} />
+    </Page>
   );
 }
 
-export default Chat;
+export default ChatContainer;

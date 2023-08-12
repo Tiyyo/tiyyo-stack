@@ -1,37 +1,40 @@
 // check if user have a valid token present in local storage
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import getToken from "../utils/get.cookies";
 
 function useValidToken() {
-  const [isAuth, setIsAuth] = useState<boolean>(true);
-  const token = localStorage.getItem("accessToken");
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [user, setUser] = useState<{ userId: string } | null>(null);
 
-  if (!token) setIsAuth(false);
+  const token = getToken();
 
-  const isValid = useCallback(async () => {
-    try {
-      const response = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "auth/current",
-        {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
+  useEffect(() => {
+    if (!token) return setIsAuth(false);
+    async function checkToken() {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_API_BASE_URL + "auth/current",
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`
+            }
           }
+        );
+        const result = await response.json();
+        if (result.userId) {
+          setIsAuth(true);
+          setUser({ userId: result.userId });
         }
-      );
-      const user = await response.json();
-      user.userId ? setIsAuth(true) : setIsAuth(false);
-    } catch (error) {
-      console.log(error);
+      } catch (error) {
+        console.log(error);
+      }
     }
+    checkToken();
   }, [token]);
-
-  // useEffect(() => {
-  //   isValid();
-  // }, [isValid]);
-
-  return isAuth;
+  console.log(isAuth, user, "USE VALID TOKEN");
+  return { isAuth, user };
 }
 
 export default useValidToken;

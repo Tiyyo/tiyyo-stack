@@ -6,12 +6,16 @@ import SeparatorLine from "../../components/separator_line";
 import SocialBtn from "../../components/social_btn";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Button from "../../components/btn";
-import getToken from "@/src/utils/get.cookies";
+import getToken from "../../utils/get.cookies";
+import AppContext from "../../context/AppContext";
 
 function Login() {
   const { register, handleSubmit } = useForm<RegisterForm>({});
+  // need to define a global type context for this
+  const { setIsAuth, setUser } = useContext(AppContext);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const navigate = useNavigate();
 
@@ -36,6 +40,7 @@ function Login() {
       //   "$1"
       // );
       const token = getToken();
+      console.log(token);
 
       if (!token) return { message: "no token found" };
 
@@ -51,14 +56,26 @@ function Login() {
           }
         }
       );
+      console.log(res);
       const user = await res.json();
       // send user.id to a global context or to an home page via navigate and use it to fetch user data / profile / posts ect ...
 
-      return user.userId ? navigate("/") : { message: "Unauthorized" };
+      console.log(user);
+
+      if (user.userId) {
+        setIsAuth(true);
+        setUser({ userId: user.userId });
+        navigate("/");
+      } else {
+        {
+          return { message: "Unauthorized" };
+        }
+      }
     } catch (error) {
       console.log(error);
     } finally {
       // clear form
+      formRef.current?.reset();
       setLoading(false);
     }
   };
@@ -69,7 +86,7 @@ function Login() {
         <h2 className="text-center text-xl">Sign in</h2>
         {/* scoial auth*/}
         <div className="my-4 flex flex-col gap-y-2">
-          <SocialBtn value="Sign Up with Google">
+          <SocialBtn value="Sign In with Google">
             <Google />
           </SocialBtn>
           <SocialBtn value="Sign In with Github">
@@ -80,6 +97,7 @@ function Login() {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-y-4"
+            ref={formRef}
           >
             <FormField
               type="text"
@@ -96,7 +114,7 @@ function Login() {
             <Button value="Sign In" type="submit" isLoading={loading} />
             <div className="self-end">
               <Link
-                to="/login"
+                to="/signup"
                 className="text-accent-500 cursor-pointer pr-3 text-xs  font-semibold"
               >
                 {" "}

@@ -7,3 +7,12 @@ export const canals = {
     params: "params",
     query: "query"
 } as const
+
+export type ChatMessage = {
+    username: string,
+    userId: string,
+    socketId: string,
+    message: string,
+    date: Date,
+    avatar: string,
+}

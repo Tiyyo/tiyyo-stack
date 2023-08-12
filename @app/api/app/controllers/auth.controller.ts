@@ -41,5 +41,9 @@ export default {
     async current(req: Request, res: Response) {
 
         res.json(req.user[0])
+    },
+    async logout(_req: Request, res: Response) {
+        res.clearCookie('accessToken')
+        res.status(200).json({ message: 'You are logged out' })
     }
 }

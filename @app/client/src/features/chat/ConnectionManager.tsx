@@ -1,11 +1,9 @@
 import { socket } from "../../socket";
 
-export function ConnectionManager() {
-  const user = "Steeve";
-
+export function ConnectionManager({ user, username = "Username" }) {
   function connect() {
     socket.connect();
-    socket.emit("username", user, "userId");
+    socket.emit("username", username, user.userId);
   }
 
   function disconnect() {

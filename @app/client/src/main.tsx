@@ -3,10 +3,13 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Chat from "./features/chat/index.tsx";
 import Login from "./features/auth/Login.tsx";
 import Register from "./features/auth/Register.tsx";
-import Protected from "./components/Protected/Protected.tsx";
+import Protected from "./components/Routes/Protected.tsx";
+import { AppContextProvider } from "./context/AppContext.tsx";
+import { QueryClient, QueryClientProvider } from "react-query";
+import RedirectToHome from "./components/Routes/RedirectToHome.tsx";
+import ChatContainer from "./features/chat/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,13 +26,45 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />
+    element: (
+      <RedirectToHome>
+        <Login />
+      </RedirectToHome>
+    )
   },
-  { path: "/chat", element: <Chat /> }
+  { path: "/chat", element: <ChatContainer /> }
 ]);
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: async ({ queryKey: [url] }) => {
+        if (typeof url === "string") {
+          try {
+            const response = await fetch(
+              import.meta.env.VITE_API_BASE_URL + "api/" + url,
+              {
+                method: "GET"
+              }
+            );
+            const data = response.json();
+            return data;
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        throw new Error("Invalid QueryKey");
+      }
+    }
+  }
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AppContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AppContextProvider>
   </React.StrictMode>
 );

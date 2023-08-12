@@ -9,7 +9,7 @@ import { canals } from '../../config/types.ts';
 
 const router: Router = express.Router();
 
-const { register, signin, current } = authController
+const { register, signin, current, logout } = authController
 const { userSchema } = schemas
 
 
@@ -21,6 +21,8 @@ router.route('/register')
 
 router.route('/current')
     .get(validateToken, factory(current))
+
+router.route('/logout').post(factory(logout))
 
 
 export default router    

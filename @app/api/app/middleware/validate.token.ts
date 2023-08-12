@@ -7,6 +7,8 @@ const { verify } = jwt
 export const validateToken = (req: Request, _res: Response, next: NextFunction) => {
     let token: string = ""
 
+    console.log(req.cookies, 'Cookies');
+
     let authHeaders = req.headers.Authorization || req.headers.authorization
 
     if (authHeaders && typeof authHeaders === "string" && authHeaders.startsWith("Bearer")) {
