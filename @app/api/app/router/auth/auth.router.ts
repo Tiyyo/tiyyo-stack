@@ -20,7 +20,7 @@ router.route('/register')
     .post(validate(userSchema, canals.body), factory(register))
 
 router.route('/current')
-    .get(validateToken, current)
+    .get(validateToken, factory(current))
 
 
 export default router    

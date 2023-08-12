@@ -33,10 +33,13 @@ export default {
         }
 
         const token = await login(data)
-
-        res.json({ accessToken: token })
+        // send token in cookie in more secure way then keep it in localstorage
+        // max age should be set through env variable 
+        res.cookie('accessToken', token, { httpOnly: false, secure: false, maxAge: 24 * 60 * 60 * 1000, })
+        res.status(200).json({ message: 'You are logged in' })
     },
     async current(req: Request, res: Response) {
-        res.send(req.user[0])
+
+        res.json(req.user[0])
     }
 }

@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "../../components/btn";
+import getToken from "@/src/utils/get.cookies";
 
 function Login() {
   const { register, handleSubmit } = useForm<RegisterForm>({});
@@ -19,37 +20,41 @@ function Login() {
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "auth/login",
+      await fetch(import.meta.env.VITE_API_BASE_URL + "auth/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173/"
+        }
+      });
+
+      // const token = document.cookie.replace(
+      //   /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+      //   "$1"
+      // );
+      const token = getToken();
+
+      if (!token) return { message: "no token found" };
+
+      // request user data with token
+      // redirect to home page
+
+      const res = await fetch(
+        import.meta.env.VITE_API_BASE_URL + "auth/current",
         {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" }
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         }
       );
-      if (response) {
-        const result = await response.json();
-        if (result.accessToken) {
-          // save token to local storage
-          // request user data with token
-          // redirect to home page
-          localStorage.setItem("accessToken", result.accessToken);
+      const user = await res.json();
+      // send user.id to a global context or to an home page via navigate and use it to fetch user data / profile / posts ect ...
 
-          const res = await fetch(
-            import.meta.env.VITE_API_BASE_URL + "auth/current",
-            {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${result.accessToken}`
-              }
-            }
-          );
-          const user = await res.json();
-          // send user.id to a global context or to an home page via navigate and use it to fetch user data / profile / posts ect ...
-
-          navigate("/");
-        }
-      }
+      return user.userId ? navigate("/") : { message: "Unauthorized" };
     } catch (error) {
       console.log(error);
     } finally {
