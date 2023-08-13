@@ -12,6 +12,7 @@ import isDatesAreEquals from "../../utils/dates.are.equals";
 import { ChatMessage } from "../../@types";
 import Return from "../../assets/Return";
 import { useNavigate } from "react-router-dom";
+import ReturnBtn from "../../components/return_btn";
 
 function Chat({ user, username = "Username" }) {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -108,10 +109,6 @@ function Chat({ user, username = "Username" }) {
     setMessages((previous: ChatMessage[]) => [...previous, ...reversedHistory]);
   }
 
-  function handleClickReturn() {
-    navigate(-1);
-  }
-
   useEffect(() => {
     function onConnect() {
       connect();
@@ -138,31 +135,33 @@ function Chat({ user, username = "Username" }) {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("message_has_been_sent", displayNewMessage);
+      socket.off("history", getHistory);
     };
   }, [user?.userId]);
 
   return (
     <>
       <header className="bg-primary-400 text-accent-200 flex h-14 items-center border-b border-opacity-30 px-4">
-        <button type="button" onClick={handleClickReturn}>
-          <Return />
-        </button>
+        <ReturnBtn />
       </header>
       <main className="flex h-[80%] flex-grow flex-col justify-end overflow-hidden bg-[url('/chat_bg_2.svg')] py-2">
-        <div className="flex flex-col gap-y-8 overflow-y-scroll py-3 pl-8 pr-3">
+        <div className="flex flex-col gap-y-1 overflow-y-scroll py-3 pl-8 pr-3">
           {messages.map((message: ChatMessage, index: number) => {
             let sameDate = false;
+            let sameAuthor = false;
             if (index >= 1) {
               sameDate = isDatesAreEquals(
                 message.date,
                 messages[index - 1].date
               );
+              sameAuthor = message.userId === messages[index - 1].userId;
             }
             return (
               <Message
                 messageInfos={message}
                 user={user}
                 displayDateMessage={sameDate}
+                displayAuthor={sameAuthor}
               />
             );
           })}

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 
 // Custom hook to fetch data from an API
+// simplified version 
 // TODO declare type for options
 //
 
-const useFetch = (url: string, options?: any) => {
-    const [data, setData] = useState(null);
+function useFetch<T>(url: string, options?: any): { data: T | null, error: unknown, isError: boolean, loading: boolean } {
+    const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<unknown | null>(null);
     const [isError, setIsError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);

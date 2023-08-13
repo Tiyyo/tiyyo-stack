@@ -65,7 +65,9 @@ export default {
         res.status(201).json(user);
     },
     async update(req: Request, res: Response) {
-        const { id, data } = req.body
+        const { id } = req.params
+        const data = req.body
+        console.log(req.body, 'Email');
         if (!id) throw new ServerError('Invalid user id');
 
         // Invalidation cache : delete cache when a mutation occurs

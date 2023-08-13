@@ -24,6 +24,5 @@ export const getHistory = async (historyKey: string) => {
     // -1 to fetch all the list
     const history = await redis.lrange(historyKey, 0, -1)
     const jsonHistory = history.map((message) => JSON.parse(message))
-    console.log(jsonHistory, 'History in get history');
     return jsonHistory
 }

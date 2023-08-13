@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
+import { IMessageProps } from "./interface";
 
-function Message({ messageInfos, user, displayDateMessage }) {
+function Message({
+  messageInfos,
+  user,
+  displayDateMessage,
+  displayAuthor
+}: IMessageProps) {
   const ownMessageVariant = `message owned bg-accent-100 self-end pr-14 relative`;
   const receivedMessageVariant =
     "message received bg-primary-300 self-start relative ";
@@ -34,19 +40,21 @@ function Message({ messageInfos, user, displayDateMessage }) {
       )}
       <>
         <div
-          className={
+          className={`${
             messageInfos.userId === user?.userId
               ? ownMessageVariant
               : receivedMessageVariant
-          }
+          } ${displayAuthor ? "" : "mt-6"}`}
         >
-          <span
-            className={`absolute -top-4 ${
-              messageInfos.userId === user.userId ? "left-1" : "right-1"
-            }  text-xs opacity-60`}
-          >
-            {messageInfos.username}
-          </span>
+          {!displayAuthor && user && (
+            <span
+              className={`absolute -top-4 ${
+                messageInfos.userId === user.userId ? "left-1 " : "right-1"
+              }  text-xs opacity-60`}
+            >
+              {messageInfos.username}
+            </span>
+          )}
           {messageInfos.userId !== user?.userId && (
             <img
               className="absolute -left-5 bottom-1 h-8 w-8 rounded-full p-1 ring-2 ring-gray-300 dark:ring-gray-500"
@@ -54,7 +62,6 @@ function Message({ messageInfos, user, displayDateMessage }) {
               alt="Bordered avatar"
             ></img>
           )}
-
           {messageInfos.message}
           <p className="text-right text-xs opacity-30">
             {messageTimeFormatted}

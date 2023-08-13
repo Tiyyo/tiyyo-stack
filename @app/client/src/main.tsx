@@ -10,6 +10,7 @@ import { AppContextProvider } from "./context/AppContext.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 import RedirectToHome from "./components/Routes/RedirectToHome.tsx";
 import ChatContainer from "./features/chat/index.tsx";
+import Profile from "./features/profile/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,14 +33,16 @@ const router = createBrowserRouter([
       </RedirectToHome>
     )
   },
-  { path: "/chat", element: <ChatContainer /> }
+  { path: "/chat", element: <ChatContainer /> },
+  { path: "/profile", element: <Profile /> }
 ]);
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       queryFn: async ({ queryKey: [url] }) => {
-        if (typeof url === "string") {
+        console.log(url, "URL");
+        if (typeof url === "string" && !url.includes("undefined")) {
           try {
             const response = await fetch(
               import.meta.env.VITE_API_BASE_URL + "api/" + url,
@@ -53,6 +56,7 @@ export const queryClient = new QueryClient({
             console.log(error);
           }
         }
+        console.log("Invalid QueryKey");
         throw new Error("Invalid QueryKey");
       }
     }

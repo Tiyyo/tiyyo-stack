@@ -17,13 +17,17 @@ model User {
 model Profile {
     id            Int       @id @default(autoincrement())
     user_id       String    @unique
-    name          String?
+    username      String?   @unique
+    firstname     String?
+    lastname      String?
     avatar_id     Int?
     avatar        Image?    @relation(fields: [avatar_id], references: [id])
     bio           String?
     date_of_birth DateTime?
     user          User      @relation(fields: [user_id], references: [id])
     posts         Post[]
+    created_at    DateTime  @default(now())
+    updated_at    DateTime  @updatedAt
 }
 
 model Post {

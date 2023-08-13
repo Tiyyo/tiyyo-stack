@@ -8,6 +8,7 @@ import NotFoundError from "../helpers/errors/not.found.error.ts";
 import UserInputError from "../helpers/errors/user.input.error.ts";
 
 export const errorHandler = (error: any, _req: Request, res: Response, next: NextFunction) => {
+    console.log(error);
     if (error instanceof ValidationError) {
         logger.error(error.name + " " + error.message);
         return res.status(error.status).json({

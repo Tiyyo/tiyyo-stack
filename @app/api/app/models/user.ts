@@ -36,8 +36,12 @@ export default {
     async update(id: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) {
         try {
             return await prisma.user.update({
-                where: id,
-                data,
+                where: {
+                    id: id
+                },
+                data: {
+                    email: data.email,
+                }
             });
         } catch (error: any) {
             throw new DatabaseError(error.message, 'user', error);

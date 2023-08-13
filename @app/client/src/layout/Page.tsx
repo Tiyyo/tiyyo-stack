@@ -16,7 +16,6 @@ function Page({ children }: { children: React.ReactNode }) {
       );
       if (result.ok) {
         setIsAuth(false);
-        console.log("logged out");
       }
     } catch (error) {
       console.log(error);
@@ -29,8 +28,7 @@ function Page({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="bg-primary-100 min-h-screen">
-      <nav className="flex justify-between gap-x-8 px-4 py-2">
-        <button>Chat</button>
+      <nav className="flex justify-end gap-x-8 px-4 py-2">
         {!isAuth ? (
           <div>
             <Link to="/login">

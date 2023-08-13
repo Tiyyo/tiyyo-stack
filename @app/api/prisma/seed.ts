@@ -10,8 +10,8 @@ const userData: Prisma.UserCreateInput[] = [
         profile: {
             create: {
                 bio: 'I like turtles',
-                name: 'Alice',
-                date_of_birth: new Date(),
+                firstname: 'Alice',
+                date_of_birth: new Date('1998-12-12'),
                 posts: {
                     create: [
                         {
@@ -31,8 +31,8 @@ const userData: Prisma.UserCreateInput[] = [
         profile: {
             create: {
                 bio: 'I like turtles',
-                name: 'Nilu',
-                date_of_birth: new Date(),
+                username: 'Nilu',
+                date_of_birth: new Date('1992-12-12'),
                 posts: {
                     create: [
                         {
@@ -52,8 +52,8 @@ const userData: Prisma.UserCreateInput[] = [
         profile: {
             create: {
                 bio: 'I like turtles',
-                name: 'Mahmoud',
-                date_of_birth: new Date(),
+                firstname: 'Mahmoud',
+                date_of_birth: new Date('1996-02-12'),
                 posts: {
                     create: [
                         {
