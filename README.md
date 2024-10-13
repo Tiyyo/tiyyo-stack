@@ -58,7 +58,7 @@ If you want to install a workspace as a dependency on another workspace, use the
 pnpm --filter <workspace-name> add <workspace-name>@workspace:x
 ```
 
-For example, to add the "tailwind-config" workspace as a dependency on the "client" workspace, use:
+For instance, to add the "tailwind-config" workspace as a dependency on the "client" workspace, use:
 
 ```
 pnpm --filter @tiyyo-stack/client add @tiyyo-stack/tailwind-config@workspace:x
